@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  customerName: MyString
+  companyName: MyString
+  serviceType: MyString
+  typeCustomer: MyString
+  cpfCnpj: MyString
+  image: MyString
+
+two:
+  customerName: MyString
+  companyName: MyString
+  serviceType: MyString
+  typeCustomer: MyString
+  cpfCnpj: MyString
+  image: MyString
