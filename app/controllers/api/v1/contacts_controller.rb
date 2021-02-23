@@ -1,4 +1,4 @@
-class ContactsController < ApplicationController
+class Api::V1::ContactsController < Api::V1::ApplicationController
   before_action :set_contact, only: [:show, :update, :destroy]
 
   # GET /contacts

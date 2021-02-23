@@ -1,4 +1,4 @@
-class FacilitiesController < ApplicationController
+class Api::V1::FacilitiesController < Api::V1::ApplicationController
   before_action :set_facility, only: [:show, :update, :destroy]
 
   # GET /facilities
