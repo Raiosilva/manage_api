@@ -5,12 +5,12 @@ class Api::V1::ContactsController < Api::V1::ApplicationController
   def index
     @contacts = Contact.all
 
-    render json: @contacts
+    render json: @contacts, include: :customer
   end
 
   # GET /contacts/1
   def show
-    render json: @contact
+    render json: @contact, include: :customer
   end
 
   # POST /contacts
@@ -41,7 +41,7 @@ class Api::V1::ContactsController < Api::V1::ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_contact
-      @contact = Contact.find(params[:id])
+      @contact = Contact.find(params[:id]) rescue nil
     end
 
     # Only allow a trusted parameter "white list" through.

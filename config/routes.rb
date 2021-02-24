@@ -4,6 +4,8 @@ Rails.application.routes.draw do
       resources :contacts
       resources :facilities
       resources :customers
+
+      get '/customers/:search', to: 'customers#show'
     end
   end
 end
