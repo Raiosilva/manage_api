@@ -3,9 +3,20 @@ class Api::V1::ContactsController < Api::V1::ApplicationController
 
   # GET /contacts
   def index
-    @contacts = Contact.all
+    customer_id = params[:customer_id]
+    puts 'customer_id'
+    puts customer_id.inspect
+    @contacts = Contact.where(customer_id: "#{customer_id}").exists?
 
-    render json: @contacts, include: :customer
+    if @contacts
+      render json: {data: @contacts}
+    else
+      render json: { message: 'Customer not exist' }
+    end
+
+    # @contacts = Contact.all
+
+    # render json: @contacts, include: :customer
   end
 
   # GET /contacts/1
