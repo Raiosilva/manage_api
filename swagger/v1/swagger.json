@@ -197,59 +197,6 @@
             }
           }
         }
-      },
-      "patch": {
-        "summary": "Update customers by id",
-        "tags": [
-          "Customers"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "success"
-          },
-          "404": {
-            "description": "not_found"
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "customerName": {
-                    "type": "string"
-                  },
-                  "companyName": {
-                    "type": "string"
-                  },
-                  "serviceType": {
-                    "type": "string"
-                  },
-                  "typeCustomer": {
-                    "type": "string"
-                  },
-                  "cpfCnpj": {
-                    "type": "string"
-                  },
-                  "image": {
-                    "type": "string"
-                  }
-                }
-              }
-            }
-          }
-        }
       }
     },
     "/api/v1/customers/{id}": {
@@ -379,6 +326,59 @@
           },
           "404": {
             "description": "Customers not found"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update customers by id",
+        "tags": [
+          "Customers"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success"
+          },
+          "404": {
+            "description": "not_found"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "customerName": {
+                    "type": "string"
+                  },
+                  "companyName": {
+                    "type": "string"
+                  },
+                  "serviceType": {
+                    "type": "string"
+                  },
+                  "typeCustomer": {
+                    "type": "string"
+                  },
+                  "cpfCnpj": {
+                    "type": "string"
+                  },
+                  "image": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
           }
         }
       },

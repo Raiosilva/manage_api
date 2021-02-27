@@ -4,8 +4,9 @@ class Customer < ApplicationRecord
 
 	attribute :customerName, :string
 
+	validates :customerName, presence: true, length: { maximum: 100 }, uniqueness: {message: 'Must be unique'}
+	validates :companyName, presence: true, length: { maximum: 100 }, uniqueness: {message: 'Must be unique'}
+	validates :cpfCnpj, presence: true, length: { is: 14 }, uniqueness: {message: 'Must be unique'}
+
 	scope :search_filter, -> customerName { where('"customers"."customerName" LIKE ?', "#{sanitize_sql_like(customerName)}%") }
-	# scope :filter_by_starts_with, -> (customerName) { where("name like ?", "#{name}%") }
-	# scope :filter_by_starts_with, -> (customerName) { where customerName: customerName }
-	# scope :filter_by_starts_with, -> (name) { where("name like ?", "#{name}%")}
 end

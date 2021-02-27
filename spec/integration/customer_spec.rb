@@ -196,7 +196,7 @@ RSpec.describe 'Customers', type: :request do
 	end
 
 	describe "Update a customer" do
-		path '/api/v1/customers' do
+		path '/api/v1/customers/{id}' do
 			patch 'Update customers by id' do
 				tags 'Customers'
 				consumes 'application/json'

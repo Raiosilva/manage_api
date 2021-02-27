@@ -1,5 +1,6 @@
 class Api::V1::CustomersController < Api::V1::ApplicationController
   before_action :set_customer, only: [:search, :show, :update, :destroy]
+  # before_action :validation_customer, only: [:create]
 
 
   def search
@@ -42,9 +43,6 @@ class Api::V1::CustomersController < Api::V1::ApplicationController
   def index
     @customers = Customer.all.paginate(page: params[:page], per_page: 10)
 
-    puts 'PAGE'
-    puts params[:page].inspect
-
     if @customers.length >= 1
       per_page = 10
       render json: {
@@ -54,7 +52,7 @@ class Api::V1::CustomersController < Api::V1::ApplicationController
                     per_page: per_page, 
                     total_data: @customers.count,
                     current_page: params[:page].to_i ? params[:page].to_i : 0,
-                    total_pages: @customers.length > 10 ? @customers.total_pages : 0
+                    total_pages: @customers.total_pages
                   }, 
                   include: [
                     { contacts: { except: [:customer_id, :created_at, :updated_at] }}, 
@@ -98,17 +96,19 @@ class Api::V1::CustomersController < Api::V1::ApplicationController
 
   # POST /customers
   def create
-    if @customer.valid?
+    @customer = Customer.where('"customers"."customerName" = ? AND "customers"."companyName" = ? AND "customers"."cpfCnpj" = ?', params[:customerName], params[:companyName], params[:cpfCnpj]).exists?
+
+    if @customer
       render json: {
                     error: 'Register Duplicated', 
                     message: 'Customer already exists', 
-                    data: @customer
+                    data: []
                   }, status: :unprocessable_entity
     else  
       @customer = Customer.new(customer_params)
 
       if @customer.save
-        render json: @customer, status: :created, location: @customer
+        render json: @customer, status: :created, data: @customer
       else
         render json: @customer.errors, status: :unprocessable_entity
       end
@@ -117,28 +117,46 @@ class Api::V1::CustomersController < Api::V1::ApplicationController
 
   # PATCH/PUT /customers/1
   def update
-    if @customer.update(customer_params)
-      render json: @customer
+    if @customer
+      if @customer.update(customer_params)
+        render json: @customer
+      else
+        render json: @customer.errors, status: :unprocessable_entity
+      end
     else
-      render json: @customer.errors, status: :unprocessable_entity
+      render json: {
+                    error: 'Error 404 Not Found', 
+                    message: 'Customer Not Found',  
+                    data: {}
+                  }, status: :unprocessable_entity
     end
   end
 
   # DELETE /customers/1
   def destroy
-    @customer.destroy
+    if @customer
+      @customer.destroy
+    else 
+      render json: {
+                    error: 'Error 404 Not Found', 
+                    message: 'Customer Not Found',  
+                    data: {}
+                  }, status: :unprocessable_entity
+    end
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_customer
-      puts 'Params Id'
-      puts params[:id].inspect
       @customer = Customer.find(params[:id]) rescue nil
     end
 
     # Only allow a trusted parameter "white list" through.
     def customer_params
       params.require(:customer).permit(:customerName, :companyName, :serviceType, :typeCustomer, :cpfCnpj, :image)
+    end
+
+    def validation_customer
+      @customer = Customer.where(params[:customer]) rescue nil
     end
 end
