@@ -162,7 +162,7 @@ RSpec.describe 'Customers', type: :request do
 		end
 	end
 
-	describe 'Create Customer' do 
+	describe 'Create a Customer' do 
 		path '/api/v1/customers' do
 			post 'Create new Cutomer' do
 				tags 'Customers'
@@ -179,7 +179,7 @@ RSpec.describe 'Customers', type: :request do
 										cpfCnpj: { type: :string },
 										image: { type: :string },
 									},
-									required: %w[customerName companyName serviceType typeCustomer cpfCnpj image]
+									required: %w[customerName companyName serviceType typeCustomer cpfCnpj]
 					}
 		  
 					response '201', 'Customer Created' do
@@ -191,6 +191,63 @@ RSpec.describe 'Customers', type: :request do
 						let!(:customer) { create(:customer) }
 						run_test!
 					end
+			end
+		end
+	end
+
+	describe "Update a customer" do
+		path '/api/v1/customers' do
+			patch 'Update customers by id' do
+				tags 'Customers'
+				consumes 'application/json'
+				produces 'application/json'
+				parameter name: :id, in: :path, type: :integer
+				parameter name: :customer, in: :body, 
+				schema: {
+					type: :object,
+					properties: {
+							customerName: { type: :string },
+							companyName: { type: :string },
+							serviceType: { type: :string },
+							typeCustomer: { type: :string },
+							cpfCnpj: { type: :string },
+							image: { type: :string },
+						}
+				}
+				response '200', :success do
+					let!(:customer) { create(:customer) }
+					run_test!
+				end
+		
+				response '404', :not_found do
+					let!(:customer) { create(:customer) }
+					let(:customer) { { customerName: 'Title', companyName: 'Body' } }
+					let!(:id) { 'invalid' }
+					run_test!
+				end
+			end
+		end
+	end
+
+	describe "Delete a customer" do
+		path '/api/v1/customers/{id}' do
+			delete 'Delete customers by id' do
+				tags 'Customers'
+				consumes 'application/json'
+				produces 'application/json'
+				parameter name: :id, in: :path, type: :integer
+
+				response '204', :no_content do
+					let!(:customer) { create(:customer) }
+					let!(:id) { create(:customer, customer: customer).id }
+					run_test!
+				end
+
+				response '404', :not_found do
+					let!(:customer) { create(:customer) }
+					let!(:id) { 'invalid' }
+					run_test!
+				end
 			end
 		end
 	end

@@ -191,9 +191,61 @@
                   "companyName",
                   "serviceType",
                   "typeCustomer",
-                  "cpfCnpj",
-                  "image"
+                  "cpfCnpj"
                 ]
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update customers by id",
+        "tags": [
+          "Customers"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success"
+          },
+          "404": {
+            "description": "not_found"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "customerName": {
+                    "type": "string"
+                  },
+                  "companyName": {
+                    "type": "string"
+                  },
+                  "serviceType": {
+                    "type": "string"
+                  },
+                  "typeCustomer": {
+                    "type": "string"
+                  },
+                  "cpfCnpj": {
+                    "type": "string"
+                  },
+                  "image": {
+                    "type": "string"
+                  }
+                }
               }
             }
           }
@@ -327,6 +379,30 @@
           },
           "404": {
             "description": "Customers not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete customers by id",
+        "tags": [
+          "Customers"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "no_content"
+          },
+          "404": {
+            "description": "not_found"
           }
         }
       }
