@@ -14,11 +14,10 @@ class Api::V1::FacilitiesController < Api::V1::ApplicationController
                     per_page: per_page, 
                     total_data: @facilities.count,
                     current_page: params[:page].to_i ? params[:page].to_i : 0,
-                    total_pages: @facilities.total_pages
+                    total_pages: @facilities.length > 10 ? @facilities.total_pages : 0
                   }, include: :customer
     else 
       per_page = 0
-      total_pages = 0
       render json: { 
                     status: 'SUCCESS', 
                     message: 'There are no facilities registered on this page',
@@ -26,7 +25,7 @@ class Api::V1::FacilitiesController < Api::V1::ApplicationController
                     per_page: per_page, 
                     total_data: @facilities.count,
                     current_page: params[:page].to_i ? params[:page].to_i : 0,
-                    total_pages: total_pages 
+                    total_pages:  @facilities.length > 10 ? @facilities.total_pages : 0 
                   }, include: :customer
     end
   end
@@ -50,12 +49,21 @@ class Api::V1::FacilitiesController < Api::V1::ApplicationController
 
   # POST /facilities
   def create
-    @facility = Facility.new(facility_params)
+    if @facility.valid?
+      render json: {
+                    error: 'Register Duplicated', 
+                    message: 'Facility already exists', 
+                    data: @facility
+                  }, status: :unprocessable_entity
 
-    if @facility.save
-      render json: @facility, status: :created, location: @facility
     else
-      render json: @facility.errors, status: :unprocessable_entity
+      @facility = Facility.new(facility_params)
+
+      if @facility.save
+        render json: @facility, status: :created, location: @facility
+      else
+        render json: @facility.errors, status: :unprocessable_entity
+      end
     end
   end
 

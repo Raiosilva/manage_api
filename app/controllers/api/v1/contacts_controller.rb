@@ -26,12 +26,20 @@ class Api::V1::ContactsController < Api::V1::ApplicationController
 
   # POST /contacts
   def create
-    @contact = Contact.new(contact_params)
+    if @contact.valid?
+      render json: {
+                    error: 'Register Duplicated', 
+                    message: 'Contact already exists', 
+                    data: @contact
+                  }, status: :unprocessable_entity
+    else 
+      @contact = Contact.new(contact_params)
 
-    if @contact.save
-      render json: @contact, status: :created, location: @contact
-    else
-      render json: @contact.errors, status: :unprocessable_entity
+      if @contact.save
+        render json: @contact, status: :created, location: @contact
+      else
+        render json: @contact.errors, status: :unprocessable_entity
+      end
     end
   end
 

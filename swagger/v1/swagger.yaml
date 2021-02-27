@@ -1,0 +1,49 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  "/api/v1/customers":
+    get:
+      summary: Retrieves a pet
+      tags:
+      - Customers
+      parameters:
+      - in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: name found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  customerName:
+                    type: string
+                  companyName:
+                    type: string
+                  serviceType:
+                    type: string
+                  typeCustomer:
+                    type: string
+                  cpfCnpj:
+                    type: string
+                  image:
+                    type: string
+                  created_at:
+                    type: string
+                  updated_at:
+                    type: string
+        '404':
+          description: Customers not found
+servers:
+- url: https://{defaultHost}
+  variables:
+    defaultHost:
+      default: www.example.com
